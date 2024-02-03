@@ -35,3 +35,10 @@
 		@apply bg-background text-foreground;
 	}
 }
+.grain {
+	width: 100%;
+	height: 100%;
+	background-image: url("https://uxtools.co/img/grain.png");
+	background-position: 0 0;
+	background-size: 300px 300px;
+}
