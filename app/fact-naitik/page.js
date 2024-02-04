@@ -1,27 +1,18 @@
 "use client";
-import Image from "next/image";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
-import { Input } from "@/components/ui/input-fact";
+import { Input } from "@/components/ui/input";
 import { GoogleGenerativeAI } from "@google/generative-ai";
-import { db } from "../firebase/firebase";
+import { useEffect, useRef, useState } from "react";
+import { arrayUnion, doc, getDoc, updateDoc } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { useRef, useState, useEffect } from "react";
-import { doc, setDoc, updateDoc, arrayUnion } from "firebase/firestore";
-
-export default function Fact() {
+import { db } from "../firebase/firebase";
+// Access your API key (see "Set up your API key" above)
+const Page = () => {
   const genAI = new GoogleGenerativeAI(process.env.NEXT_PUBLIC_GEMINI_API_KEY);
   const model = genAI.getGenerativeModel({ model: "gemini-pro" });
   const inputRef = useRef();
   const [chatHistory, setChatHistory] = useState([]);
+
+
 
   const chat = model.startChat({
     history: [
@@ -38,9 +29,7 @@ export default function Fact() {
   });
   useEffect(() => {
     async function sendData() {
-      const uid = getAuth().currentUser.uid;
-      console.log(uid);
-      const userRef = doc(db, "users", uid);
+      const userRef = doc(db, "users", getAuth().currentUser.uid);
 
       await updateDoc(
         userRef,
@@ -55,6 +44,7 @@ export default function Fact() {
 
     sendData();
   }, [chatHistory]);
+
   async function sendMessage() {
     const msg = inputRef.current?.value;
     console.log(msg);
@@ -70,36 +60,12 @@ export default function Fact() {
       userMessage,
       botMessage,
     ]);
-    console.log(chatHistory)
   }
-
   return (
-    <div className="bg-background text-foreground flex flex-col h-screen overflow-x-auto w-full">
-      {/* Chat Messages */}
-      <div className="flex flex-col items-start justify-start w-full max-w-3xl mx-auto px-5 gap-6 overflow-y-auto mt-10">
-        {chatHistory.map((chat) => {
-          return (
-            <>
-              <Card className="w-full border-primary">
-                <CardHeader>
-                  <CardTitle>{chat.role}</CardTitle>
-                </CardHeader>
-                <CardContent>{chat.text}</CardContent>
-              </Card>
-            </>
-          );
-        })}
-      </div>
-
-      <div className="flex flex-col h-fit items-start justify-end w-full max-w-3xl mx-auto px-5 pb-10">
-        <Input
-          type="name"
-          placeholder="Enter The Misinformation!"
-          className="sticky bottom-32 md:bottom-10"
-          ref={inputRef}
-        />{" "}
-        <Button onClick={()=>sendMessage} />
-      </div>
-    </div>
+    <>
+      <Input type="text" ref={inputRef} />
+      <button onClick={sendMessage}>CLCICKCKCK</button>
+    </>
   );
-}
+};
+export default Page;
