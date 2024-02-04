@@ -11,7 +11,7 @@ import {
 	CardHeader,
 	CardTitle,
 } from "@/components/ui/card";
-export default function Fact() {
+export default function Health_Summary() {
 	const genAI = new GoogleGenerativeAI(
 		process.env.NEXT_PUBLIC_GEMINI_API_KEY
 	);

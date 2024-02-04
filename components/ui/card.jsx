@@ -44,7 +44,7 @@ CardDescription.displayName = "CardDescription";
 const CardContent = React.forwardRef(({ className, ...props }, ref) => (
 	<div
 		ref={ref}
-		className={cn("p-6 pt-0 flex flex-col max-w-sm space-y-8", className)}
+		className={cn("p-6 pt-0 flex flex-col  space-y-8", className)}
 		{...props}
 	/>
 ));

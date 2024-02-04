@@ -24,25 +24,20 @@ export default function Login() {
 		}
 	};
 	return (
-		<section class="bg-white">
+		<section class="bg-background">
 			<div class="lg:grid lg:min-h-screen lg:grid-cols-12">
-				<section class="relative flex h-32 items-end bg-gray-900 lg:col-span-5 lg:h-full xl:col-span-6">
+				<section class="relative flex h-[20vh] items-end bg-gray-900 lg:col-span-5 lg:h-full xl:col-span-6">
 					<img
 						alt="Night"
 						src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
 						class="absolute inset-0 h-full w-full object-cover opacity-60"
 					/>
 
-					<div class="hidden lg:relative lg:block lg:p-12">
-						<h2 class="mt-6 text-2xl font-bold text-white sm:text-3xl md:text-4xl">
+					<div class="hidden lg:relative lg:block lg:p-12 text-white">
+						<h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
+							{" "}
 							Welcome to Health App
-						</h2>
-
-						<p class="mt-4 leading-relaxed text-white/90">
-							Lorem, ipsum dolor sit amet consectetur adipisicing
-							elit. Eligendi nam dolorum aliquam, quibusdam
-							aperiam voluptatum.
-						</p>
+						</h1>
 					</div>
 				</section>
 
