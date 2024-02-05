@@ -1,4 +1,3 @@
-import { GeistSans } from "geist/font/sans";
 import "./globals.css";
 import { cn } from "../lib/utils";
 
@@ -11,12 +10,12 @@ export default function RootLayout({ children }) {
 	return (
 		<html lang="en">
 			<body
-				className={cn(
-					"min-h-screen bg-background antialiased ",
-					GeistSans.className
-				)}
+				className={cn("min-h-screen bg-background antialiased grain ")}
 			>
-				{children}
+				<section className=" text-white flex flex-col mx-auto justify-center items-start px-4 md:pl-[10vw] border border-solid border-black rounded-4 min-h-[calc(100vh-24px)] m-3 rounded-2xl w-[calc(100vw-24px)] relative">
+					{" "}
+					{children}
+				</section>
 			</body>
 		</html>
 	);
