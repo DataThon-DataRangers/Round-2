@@ -1,21 +1,14 @@
 "use client";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
 import { Input } from "@/components/ui/input-fact";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { db } from "../firebase/firebase";
 import { getAuth } from "firebase/auth";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import Markdown from "react-markdown";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useRef, useState, useEffect } from "react";
-import { doc, setDoc, updateDoc, arrayUnion } from "firebase/firestore";
+import { doc, setDoc, updateDoc, arrayUnion, getDoc } from "firebase/firestore";
 
 export default function Fact() {
   const genAI = new GoogleGenerativeAI(process.env.NEXT_PUBLIC_GEMINI_API_KEY);
@@ -36,25 +29,33 @@ export default function Fact() {
       },
     ],
   });
+
   useEffect(() => {
     async function sendData() {
-      const uid = getAuth().currentUser.uid;
-      console.log(uid);
-      const userRef = doc(db, "users", uid);
+      try {
+        const uid = getAuth().currentUser.uid;
+        console.log(uid);
+        const userRef = doc(db, "users", uid);
 
-      await updateDoc(
-        userRef,
-        {
-          chat: arrayUnion(...chatHistory),
-        },
-        { merge: true }
-      );
+        await getDoc(userRef);
+
+        await updateDoc(
+          userRef,
+          {
+            chat: arrayUnion(...chatHistory),
+          },
+          { merge: true }
+        );
+      } catch {
+        console.error("nahi pata");
+      }
 
       console.log(chatHistory);
     }
 
     sendData();
   }, [chatHistory]);
+
   async function sendMessage() {
     const msg = inputRef.current?.value;
     console.log(msg);
@@ -70,35 +71,50 @@ export default function Fact() {
       userMessage,
       botMessage,
     ]);
-    console.log(chatHistory)
+    console.log(chatHistory);
   }
 
   return (
     <div className="bg-background text-foreground flex flex-col h-screen overflow-x-auto w-full">
       {/* Chat Messages */}
       <div className="flex flex-col items-start justify-start w-full max-w-3xl mx-auto px-5 gap-6 overflow-y-auto mt-10">
+        Your chat history will appear
         {chatHistory.map((chat) => {
           return (
             <>
-              <Card className="w-full border-primary">
+              <Card
+                className={`w-full ${
+                  chat.role == "bot" ? "border-red-500" : "border-primary"
+                } `}
+              >
                 <CardHeader>
-                  <CardTitle>{chat.role}</CardTitle>
+                  <CardTitle
+                    className={`capitalize text-xl ${
+                      chat.role == "bot" ? "text-red-500" : "text-primary"
+                    } `}
+                  >
+                    {chat.role}
+                  </CardTitle>
                 </CardHeader>
-                <CardContent>{chat.text}</CardContent>
+                <CardContent>
+                  <Markdown>{chat.text}</Markdown>
+                </CardContent>
               </Card>
             </>
           );
         })}
       </div>
 
-      <div className="flex flex-col h-fit items-start justify-end w-full max-w-3xl mx-auto px-5 pb-10">
+      <div className="flex h-fit items-start justify-end w-full max-w-3xl mx-auto px-5 pb-10">
         <Input
           type="name"
           placeholder="Enter The Misinformation!"
-          className="sticky bottom-32 md:bottom-10"
+          className="sticky bottom-32 mt-4 md:bottom-10"
           ref={inputRef}
         />{" "}
-        <Button onClick={()=>sendMessage} />
+        <Button onClick={sendMessage} className="ml-4 mt-5">
+          Submit
+        </Button>
       </div>
     </div>
   );
