@@ -94,6 +94,7 @@ export default function Fact() {
 				{chatHistory.map((chat) => {
 					return (
 						<Card
+            key={chat.text}
 							className={`w-full text-black font-extralight border`}
 						>
 							<CardHeader>
