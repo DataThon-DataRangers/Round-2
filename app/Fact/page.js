@@ -128,15 +128,21 @@ export default function Fact() {
       </div>
 
       <div className="flex h-fit items-start justify-end w-full max-w-3xl mx-auto px-5 pb-10">
-        <Input
-          type="name"
-          placeholder="Enter The Misinformation!"
-          className="sticky bottom-32 mt-4 md:bottom-10"
-          ref={inputRef}
-        />{" "}
-        <Button onClick={sendMessage} className="ml-4 mt-5">
-          Submit
-        </Button>
+        <form>
+          <Input
+            type="name"
+            placeholder="Enter The Misinformation!"
+            className="sticky bottom-32 mt-4 md:bottom-10"
+            ref={inputRef}
+          />{" "}
+          <Button
+            onClick={sendMessage}
+            className="ml-4 mt-5"
+            onSubmit={sendMessage}
+          >
+            Submit
+          </Button>
+        </form>
       </div>
     </div>
   );

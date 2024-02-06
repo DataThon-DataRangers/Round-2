@@ -23,7 +23,7 @@ export default function Fact() {
       {
         role: "user",
         parts:
-          "You are HealthAnswerBot, a healthcare expert designed to answer health-related queries. You will be asked a health-related question. You will answer the question and clear and clarify the doubt or query. You must answer concisely and ensure the answer is comprehensive for the user. Resolve the doubts by providing 3-4 facts. Your goal is to ensure user’s queries or doubts are completely resolved and they receive a reliable answer to their question. Pleas try to make it according to Indian Market",
+          "You are HealthAnswerBot, a healthcare expert designed to answer health-related queries. You will be asked a health-related question. You will answer the question and clear and clarify the doubt or query. You must answer concisely and ensure the answer is comprehensive for the user. Resolve the doubts by providing 3-4 facts. Your goal is to ensure user’s queries or doubts are completely resolved and they receive a reliable answer to their question. Please try to respond it according to Indian Market",
       },
       {
         role: "model",
@@ -94,9 +94,7 @@ export default function Fact() {
         {chatHistory.map((chat) => {
           return (
             <>
-              <Card
-                className={`w-full  text-black font-extralight`}
-              >
+              <Card className={`w-full  text-black font-extralight`}>
                 <CardHeader>
                   <CardTitle
                     className={`capitalize text-xl align-baseline   ${
@@ -127,15 +125,17 @@ export default function Fact() {
       </div>
 
       <div className="flex h-fit items-start justify-end w-full max-w-3xl mx-auto px-5 pb-10">
-        <Input
-          type="name"
-          placeholder="Enter your query"
-          className="sticky bottom-32 mt-4 md:bottom-10"
-          ref={inputRef}
-        />{" "}
-        <Button onClick={sendMessage} className="ml-4 mt-5">
-          Submit
-        </Button>
+        <form>
+          <Input
+            type="name"
+            placeholder="Enter your query"
+            className="sticky bottom-32 mt-4 md:bottom-10"
+            ref={inputRef}
+          />{" "}
+          <Button onClick={sendMessage}  onsubmit={sendMessage} className="ml-4 mt-5">
+            Submit
+          </Button>
+        </form>
       </div>
     </div>
   );
