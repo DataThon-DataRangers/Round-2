@@ -12,77 +12,76 @@ import { doc, setDoc, updateDoc, arrayUnion, getDoc } from "firebase/firestore";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export default function Fact() {
-	const genAI = new GoogleGenerativeAI(
-		process.env.NEXT_PUBLIC_GEMINI_API_KEY
-	);
-  const [loading,setLoading]=useState(false);
-	const model = genAI.getGenerativeModel({ model: "gemini-pro" });
-	const inputRef = useRef();
-	const [chatHistory, setChatHistory] = useState([]);
+  const genAI = new GoogleGenerativeAI(process.env.NEXT_PUBLIC_GEMINI_API_KEY);
+  const [loading, setLoading] = useState(false);
+  const model = genAI.getGenerativeModel({ model: "gemini-pro" });
+  const inputRef = useRef();
+  const [chatHistory, setChatHistory] = useState([]);
 
-	const chat = model.startChat({
+  const chat = model.startChat({
     history: [
       {
         role: "user",
         parts:
-          "You are HealthCheckBot, a healthcare expert designed to verify the accuracy of health-related information. You will be provided with a piece of information, which will be the received input of the user. You will understand the information with respect to the health industry and recognise its significance in the medical or health space. You will either confirm its accuracy by providing two supporting facts or identify it as misinformation with two to three valid reasons or facts explaining why it is incorrect. Your goal is to ensure users receive reliable and evidence-based information about health. You have to ensure you understand the user’s entered information and correctly, factually verify it",
+          "You are HealthAnswerBot, a healthcare expert designed to answer health-related queries. You will be asked a health-related question. You will answer the question and clear and clarify the doubt or query. You must answer concisely and ensure the answer is comprehensive for the user. Resolve the doubts by providing 3-4 facts. Your goal is to ensure user’s queries or doubts are completely resolved and they receive a reliable answer to their question. Pleas try to make it according to Indian Market",
       },
       {
         role: "model",
-        parts: "Sure I would assist you and give whatever you ask for related to healthcare",
+        parts:
+          "Sure I would assist you and give whatever you ask for related to healthcare",
       },
     ],
   });
 
-	useEffect(() => {
-		async function sendData() {
-			try {
-				const uid = getAuth().currentUser.uid;
-				console.log(uid);
-				const userRef = doc(db, "users", uid);
+  useEffect(() => {
+    async function sendData() {
+      try {
+        const uid = getAuth().currentUser.uid;
+        console.log(uid);
+        const userRef = doc(db, "users", uid);
 
-				await getDoc(userRef);
+        await getDoc(userRef);
 
-				await updateDoc(
-					userRef,
-					{
-						chat: arrayUnion(...chatHistory),
-					},
-					{ merge: true }
-				);
-			} catch {
-				console.error("nahi pata");
-			}
+        await updateDoc(
+          userRef,
+          {
+            chat: arrayUnion(...chatHistory),
+          },
+          { merge: true }
+        );
+      } catch {
+        console.error("nahi pata");
+      }
 
-			console.log(chatHistory);
-		}
+      console.log(chatHistory);
+    }
 
-		sendData();
-	}, [chatHistory]);
+    sendData();
+  }, [chatHistory]);
 
-	async function sendMessage() {
-		const msg = inputRef.current?.value;
-		console.log(msg);
-    setLoading(true)
-		const userMessage = { role: "user", text: msg };
+  async function sendMessage() {
+    const msg = inputRef.current?.value;
+    console.log(msg);
+    setLoading(true);
+    const userMessage = { role: "user", text: msg };
 
-		const result = await chat.sendMessage(msg);
-		const response = await result.response;
-		console.log(response);
-		const text = response.text();
-		const botMessage = { role: "bot", text: text };
-		setChatHistory((prevChatHistory) => [
-			...prevChatHistory,
-			userMessage,
-			botMessage,
-		]);
-		console.log(chatHistory);
+    const result = await chat.sendMessage(msg);
+    const response = await result.response;
+    console.log(response);
+    const text = response.text();
+    const botMessage = { role: "bot", text: text };
+    setChatHistory((prevChatHistory) => [
+      ...prevChatHistory,
+      userMessage,
+      botMessage,
+    ]);
+    console.log(chatHistory);
 
     setLoading(false);
-        inputRef.current.value = "";
-	}
+    inputRef.current.value = "";
+  }
 
-	return (
+  return (
     <div className="flex flex-col h-screen overflow-x-auto w-full">
       {loading && (
         <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-gray-800 bg-opacity-50">
@@ -96,7 +95,7 @@ export default function Fact() {
           return (
             <>
               <Card
-                className={`w-full  text-black font-extralight                          `}
+                className={`w-full  text-black font-extralight`}
               >
                 <CardHeader>
                   <CardTitle
@@ -130,7 +129,7 @@ export default function Fact() {
       <div className="flex h-fit items-start justify-end w-full max-w-3xl mx-auto px-5 pb-10">
         <Input
           type="name"
-          placeholder="Enter The Misinformation!"
+          placeholder="Enter your query"
           className="sticky bottom-32 mt-4 md:bottom-10"
           ref={inputRef}
         />{" "}
