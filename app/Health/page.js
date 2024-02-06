@@ -247,9 +247,8 @@ export default function Fact() {
 					{/* <Markdown> {text}</Markdown> */}
 					<div className=" my-auto prose-zinc prose-img:!max-h-[20rem] md:prose-img:!max-h-[15rem] prose-img:rounded-xl prose-img:shadow-2xl prose-img:object-cover  prose-invert ">
 						<ReactMarkdown
-							rehypePlugins={[rehypeRaw]}
-							children={text}
-						></ReactMarkdown>
+							
+						>{text}</ReactMarkdown>
 						{console.log(text)}
 					</div>
 
